@@ -33,6 +33,37 @@ description: 生成代码库 Ontology 五要素文档。用于分析一个 codeb
 - 五要素为：`Object Type`、`Property`、`Link Type`、`Action Type`、`Function`。
 - `Interface`、`Shared Property`、`Value Type` 只是扩展能力，可在相关 YAML 中作为辅助结构出现，不创建额外强制目录。
 - 每个重要 item 都要有 `sourceEvidence` 和 `confidence`。
+- 生成的 YAML 内容语言必须为中文；schema key、ID、代码路径、symbol、原始枚举值和外部系统名称可保持原文。
+
+## 输出语言要求
+
+生成到目标 codebase `.ontology/` 下的所有 YAML 文件，内容语言必须以中文为主。
+
+必须使用中文的字段：
+
+- `displayName`
+- `description`
+- `notes`
+- `question`
+- `suggestedResolution`
+- `qualityChecks.*.notes`
+- `guide.definition`
+- `guide` 下所有解释性文字
+- `.ontology/README.md` 中的人类可读内容
+- object、property、link、action、function 的业务语义说明
+
+可以保留原文的字段：
+
+- YAML schema key，如 `metadata`、`items`、`sourceEvidence`
+- 稳定机器 ID，如 `order`、`customerPlacesOrder`、`calculateOrderTotal`
+- 代码路径，如 `src/domain/order/Order.ts`
+- 代码 symbol，如 `OrderService.cancelOrder`
+- API path，如 `POST /orders/{orderId}/cancel`
+- 数据库表名、列名、外键名
+- 源代码中的枚举值和状态值，如 `draft`、`placed`、`cancelled`
+- 外部系统或第三方产品名称
+
+如果原始 codebase 使用英文领域词，`id` 可以保持英文 lowerCamelCase，但 `displayName` 和 `description` 必须翻译成中文。原始英文名称写入 `aliases` 或 `sourceEvidence`，不要丢失。
 
 ## 工作流程
 
@@ -46,6 +77,7 @@ description: 生成代码库 Ontology 五要素文档。用于分析一个 codeb
 8. 抽取 Functions：可复用业务逻辑，如计算、校验、权限、聚合、排序、推荐、风控。
 9. 为每个要素写证据，记录不确定问题。
 10. 运行质量检查，更新每个 YAML 的 `qualityChecks`。
+11. 检查所有生成 YAML 的人类可读内容是否为中文。
 
 ## 文件写入规则
 
@@ -160,6 +192,7 @@ qualityChecks: {}
 - Function 是否是可复用业务逻辑，而不是 helper。
 - 每个重要判断是否有 source evidence。
 - 不确定问题是否进入 `openQuestions`。
+- YAML 中面向人类阅读的内容是否为中文。
 
 常见反模式：
 

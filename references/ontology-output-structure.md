@@ -4,6 +4,34 @@
 
 本文件只定义输出结构、模板和示例，不包含外部参考资料。
 
+## 0. 输出语言要求
+
+生成到目标 codebase `.ontology/` 下的 YAML 文件，内容语言必须为中文。
+
+必须写成中文的值：
+
+- `displayName`
+- `description`
+- `notes`
+- `question`
+- `suggestedResolution`
+- `qualityChecks.*.notes`
+- `guide.definition`
+- object、property、link、action、function 的业务语义描述
+- `.ontology/README.md` 中的人类可读内容
+
+允许保持原文的值：
+
+- YAML schema key。
+- 稳定机器 ID。
+- 代码路径和 symbol。
+- API path。
+- 数据库表名、列名和外键名。
+- 代码中已有的枚举值、状态值和常量值。
+- 第三方系统名称。
+
+示例：`id: calculateOrderTotal` 可以保持英文，但 `displayName` 应写成 `计算订单总额`，`description` 应写成中文。
+
 ## 1. 目录结构
 
 ```text
@@ -28,8 +56,8 @@
 ```yaml
 metadata:
   ontologyId: codebaseOntology
-  name: Codebase Ontology
-  description: Business ontology extracted from this codebase.
+  name: 代码库 Ontology
+  description: 从当前代码库抽取的业务 Ontology。
   generatedAt: "YYYY-MM-DD"
   generatedBy: "codex"
   codebase:
@@ -91,14 +119,14 @@ metadata:
   codebaseRoot: ""
 
 guide:
-  definition: Object Types model real-world business entities or events.
+  definition: Object Type 用于建模真实业务世界中的实体或事件。
 
 items:
   - id: objectTypeId
-    displayName: Object Type Name
-    pluralDisplayName: Object Type Names
+    displayName: 对象类型名称
+    pluralDisplayName: 对象类型复数名称
     category: entity | event | document | actor | configuration | metric
-    description: Business meaning of this object type.
+    description: 该对象类型的业务含义。
     aliases: []
     domain: domainId
     primaryKey: id
@@ -137,10 +165,10 @@ qualityChecks:
 ```yaml
 items:
   - id: order
-    displayName: Order
-    pluralDisplayName: Orders
+    displayName: 订单
+    pluralDisplayName: 订单
     category: entity
-    description: A commercial request by a customer to purchase one or more products.
+    description: 客户购买一个或多个商品时形成的商业请求。
     aliases:
       - OrderEntity
       - orders
@@ -183,7 +211,7 @@ items:
       - canCancelOrder
     excludedFields:
       - field: internalSyncVersion
-        reason: Implementation-only synchronization field.
+        reason: 仅用于实现层同步的字段，不属于业务属性。
         sourceEvidence:
           - orderEntity
     sourceEvidence:
@@ -202,13 +230,13 @@ metadata:
   codebaseRoot: ""
 
 guide:
-  definition: Properties model business characteristics of object types.
+  definition: Property 用于建模对象类型的业务特征。
 
 items:
   - id: propertyId
     objectType: objectTypeId
-    displayName: Property Name
-    description: Business meaning of this property.
+    displayName: 属性名称
+    description: 该属性的业务含义。
     type: string | integer | long | decimal | float | double | boolean | date | timestamp | enum | array | object | struct | geoPoint | geoShape | attachment | mediaReference | timeSeries
     required: false
     nullable: true
@@ -236,8 +264,8 @@ qualityChecks:
 items:
   - id: status
     objectType: order
-    displayName: Status
-    description: Current lifecycle state of the order.
+    displayName: 状态
+    description: 订单当前所处的生命周期状态。
     type: enum
     required: true
     nullable: false
@@ -259,8 +287,8 @@ items:
 
   - id: totalAmount
     objectType: order
-    displayName: Total Amount
-    description: Total monetary amount of all order lines after discounts.
+    displayName: 订单总金额
+    description: 所有订单明细在折扣后的总金额。
     type:
       valueType: money
     required: true
@@ -286,15 +314,15 @@ metadata:
   codebaseRoot: ""
 
 guide:
-  definition: Link Types model business relationships between object types.
+  definition: Link Type 用于建模对象类型之间的业务关系。
 
 items:
   - id: sourceRelatesToTarget
-    displayName: Source Relates To Target
-    description: Business meaning of this relationship.
+    displayName: 源对象关联目标对象
+    description: 该关系的业务含义。
     fromObjectType: sourceObject
     toObjectType: targetObject
-    reverseDisplayName: Target Is Related To Source
+    reverseDisplayName: 目标对象被源对象关联
     cardinality: oneToOne | oneToMany | manyToOne | manyToMany
     directionality: directed | bidirectional
     required: false
@@ -318,11 +346,11 @@ qualityChecks:
 ```yaml
 items:
   - id: customerPlacesOrder
-    displayName: Customer Places Order
-    description: A customer places an order.
+    displayName: 客户下订单
+    description: 一个客户创建或提交一个订单。
     fromObjectType: customer
     toObjectType: order
-    reverseDisplayName: Order Is Placed By Customer
+    reverseDisplayName: 订单由客户提交
     cardinality: oneToMany
     directionality: directed
     required: true
@@ -345,12 +373,12 @@ metadata:
   codebaseRoot: ""
 
 guide:
-  definition: Action Types model business operations that change objects, properties, or links.
+  definition: Action Type 用于建模会改变对象、属性或链接的业务操作。
 
 items:
   - id: performBusinessAction
-    displayName: Perform Business Action
-    description: Business intent and outcome of the action.
+    displayName: 执行业务动作
+    description: 该动作的业务意图和结果。
     actors:
       - role: ""
         description: ""
@@ -360,7 +388,7 @@ items:
         cardinality: single | set
     inputParameters:
       - id: objectId
-        displayName: Object ID
+        displayName: 对象 ID
         type: string
         required: true
         nullable: false
@@ -399,40 +427,40 @@ qualityChecks:
 ```yaml
 items:
   - id: cancelOrder
-    displayName: Cancel Order
-    description: Cancel an order that has not yet been fulfilled.
+    displayName: 取消订单
+    description: 取消一个尚未履约完成的订单。
     actors:
       - role: customer
-        description: Customer cancelling their own order.
+        description: 客户取消自己的订单。
       - role: supportAgent
-        description: Support agent cancelling an order.
+        description: 客服人员代客户取消订单。
     targets:
       - objectType: order
         parameter: orderId
         cardinality: single
     inputParameters:
       - id: orderId
-        displayName: Order ID
+        displayName: 订单 ID
         type: string
         required: true
         nullable: false
-        description: Order to cancel.
+        description: 需要取消的订单。
         constraints: {}
       - id: reason
-        displayName: Reason
+        displayName: 取消原因
         type: string
         required: false
         nullable: true
-        description: Optional cancellation reason.
+        description: 可选的取消原因。
         constraints:
           maxLength: 500
     rules:
       preconditions:
-        - Order status must be draft, placed, or paid.
+        - 订单状态必须是 draft、placed 或 paid。
       validations:
-        - Fulfilled orders cannot be cancelled.
+        - 已履约完成的订单不能取消。
       authorization:
-        - Actor must own the order or have supportAgent role.
+        - 执行人必须拥有该订单，或具有 supportAgent 角色。
     effects:
       creates: []
       updates:
@@ -444,10 +472,10 @@ items:
       unlinks: []
     sideEffects:
       notifications:
-        - Send cancellation notification.
+        - 发送订单取消通知。
       webhooks: []
       externalCalls:
-        - If payment has been captured, request refund from payment provider.
+        - 如果订单已收款，向支付供应商请求退款。
       scheduledJobs: []
     reversible: false
     usedFunctions:
@@ -468,12 +496,12 @@ metadata:
   codebaseRoot: ""
 
 guide:
-  definition: Functions model reusable business logic.
+  definition: Function 用于建模可复用的业务逻辑。
 
 items:
   - id: calculateBusinessValue
-    displayName: Calculate Business Value
-    description: Reusable business logic.
+    displayName: 计算业务值
+    description: 可复用的业务逻辑。
     inputs:
       - id: inputId
         type: string
@@ -513,8 +541,8 @@ qualityChecks:
 ```yaml
 items:
   - id: calculateOrderTotal
-    displayName: Calculate Order Total
-    description: Calculate total amount for an order from its line items.
+    displayName: 计算订单总额
+    description: 根据订单明细计算订单总金额。
     inputs:
       - id: orderId
         type: string
@@ -522,7 +550,7 @@ items:
     outputs:
       type:
         valueType: money
-      description: Total monetary amount for the order.
+      description: 该订单的总金额。
     reads:
       objectTypes:
         - order
@@ -547,7 +575,7 @@ items:
     determinism: deterministic
     externalDependencies: []
     errorCases:
-      - Returns validation error when an order has no line items.
+      - 当订单没有明细时返回校验错误。
     sourceEvidence:
       - calculateOrderTotalFunction
       - orderTotalTests
@@ -557,10 +585,10 @@ items:
 ## 9. README.md 摘要模板
 
 ```markdown
-# Codebase Ontology
+# 代码库 Ontology
 
 生成时间：YYYY-MM-DD  
-Codebase：<name>
+代码库：<name>
 
 ## 摘要
 
@@ -579,4 +607,3 @@ Codebase：<name>
 
 ...
 ```
-

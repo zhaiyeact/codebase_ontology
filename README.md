@@ -58,6 +58,18 @@ openQuestions: []
 qualityChecks: {}
 ```
 
+## 输出语言
+
+生成到目标 codebase `.ontology/` 下的 YAML 文件，内容语言必须为中文。
+
+具体要求：
+
+- `displayName`、`description`、`notes`、`question`、`suggestedResolution` 等人类可读内容必须使用中文。
+- `qualityChecks` 中的说明性文字必须使用中文。
+- `.ontology/README.md` 必须使用中文。
+- YAML schema key、机器 ID、代码路径、symbol、API path、数据库表名、原始枚举值可以保持原文。
+- 如果原始 codebase 使用英文领域词，可以保留英文 `id`，但必须提供中文 `displayName` 和中文 `description`。
+
 ## 安装
 
 将本仓库放入 Codex skills 目录：
