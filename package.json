@@ -1,0 +1,39 @@
+{
+  "name": "@zhaiyeact/codebase-ontology",
+  "version": "0.1.0",
+  "description": "Agent skill for generating codebase ontology YAML files.",
+  "license": "MIT",
+  "type": "commonjs",
+  "bin": {
+    "codebase-ontology": "bin/codebase-ontology.js"
+  },
+  "files": [
+    "SKILL.md",
+    "README.md",
+    "LICENSE",
+    "agents",
+    "references",
+    "bin"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/zhaiyeact/codebase_ontology.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zhaiyeact/codebase_ontology/issues"
+  },
+  "homepage": "https://github.com/zhaiyeact/codebase_ontology#readme",
+  "keywords": [
+    "agent",
+    "skill",
+    "ontology",
+    "codex",
+    "claude-code"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
