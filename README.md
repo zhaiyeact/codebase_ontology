@@ -20,7 +20,7 @@
 使用 npm 全局安装：
 
 ```bash
-npm install -g @zhaiyeact/codebase-ontology
+npm install -g @zhaiye/codebase-ontology
 ```
 
 安装到 Codex 全局 skills：

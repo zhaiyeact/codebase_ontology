@@ -1,5 +1,5 @@
 {
-  "name": "@zhaiyeact/codebase-ontology",
+  "name": "@zhaiye/codebase-ontology",
   "version": "0.1.0",
   "description": "Agent skill for generating codebase ontology YAML files.",
   "license": "MIT",
